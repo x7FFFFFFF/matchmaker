@@ -1,15 +1,21 @@
 package com.example.matchmaker.model;
 
+import lombok.ToString;
 import lombok.Value;
 
 import java.util.List;
 import java.util.function.BiFunction;
 
-@Value
 public class MinMaxAvg<T extends Comparable<T>> {
-    T min;
-    T max;
-    T avg;
+    private final T min;
+    private final  T max;
+    private final  T avg;
+
+    public MinMaxAvg(T min, T max, T avg) {
+        this.min = min;
+        this.max = max;
+        this.avg = avg;
+    }
 
     static class Builder<T extends Comparable<T>> {
         private T min;
@@ -44,5 +50,10 @@ public class MinMaxAvg<T extends Comparable<T>> {
         public MinMaxAvg<T> build() {
             return new MinMaxAvg<>(min, max, avgFunc.apply(sum, n));
         }
+    }
+
+    @Override
+    public String toString() {
+        return "min=" + min + "; max=" + max + "; avg=" + avg + ';';
     }
 }

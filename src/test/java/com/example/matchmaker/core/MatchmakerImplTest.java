@@ -18,10 +18,29 @@ class MatchmakerImplTest {
         matchmaker.add(new Player("Player1", 1.0, 1000));
         assertFalse(matchmaker.findMatch().isPresent());
         matchmaker.add(new Player("Player2", 1.0, 1000));
-        final Optional<Match> match = matchmaker.findMatch();
-        assertTrue(match.isPresent());
-        final Set<Player> players = match.get().getPlayers();
-        assertEquals(2, players.size());
+        {
+            final Optional<Match> match = matchmaker.findMatch();
+            assertTrue(match.isPresent());
+            final Set<Player> players = match.get().getPlayers();
+            assertEquals(2, players.size());
+            assertFalse(matchmaker.findMatch().isPresent());
+        }
+        {
+            matchmaker.add(new Player("Player1", 1.2, 1300));
+            matchmaker.add(new Player("Player2", 1.0, 1000));
+            final Optional<Match> match = matchmaker.findMatch();
+            assertTrue(match.isPresent());
+            final Set<Player> players = match.get().getPlayers();
+            assertEquals(2, players.size());
+            assertFalse(matchmaker.findMatch().isPresent());
+        }
+
+        {
+            matchmaker.add(new Player("Player1", 2.2, 1300));
+            matchmaker.add(new Player("Player2", 1.0, 1000));
+            final Optional<Match> match = matchmaker.findMatch();
+            assertFalse(match.isPresent());
+        }
 
     }
 
