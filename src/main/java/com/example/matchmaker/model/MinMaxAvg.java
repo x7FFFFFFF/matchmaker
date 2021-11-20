@@ -8,8 +8,8 @@ import java.util.function.BiFunction;
 
 public class MinMaxAvg<T extends Comparable<T>> {
     private final T min;
-    private final  T max;
-    private final  T avg;
+    private final T max;
+    private final T avg;
 
     public MinMaxAvg(T min, T max, T avg) {
         this.min = min;
@@ -22,7 +22,7 @@ public class MinMaxAvg<T extends Comparable<T>> {
         private T max;
         private T sum;
         private final BiFunction<T, Integer, T> avgFunc;
-        private BiFunction<T, T, T> sumFunc;
+        private final BiFunction<T, T, T> sumFunc;
         int n;
 
         public Builder(T sum, BiFunction<T, Integer, T> avgFunc, BiFunction<T, T, T> sumFunc) {
@@ -34,17 +34,15 @@ public class MinMaxAvg<T extends Comparable<T>> {
         public void add(T el) {
             n++;
             sum = sumFunc.apply(sum, el);
-            if (min != null) {
-                min = el.compareTo(min) < 0 ? el : min;
-            } else {
+            if (min == null) {
                 min = el;
             }
-            if (max != null) {
-                max = el.compareTo(max) > 0 ? el : max;
-            }
-            {
+            if (max == null) {
                 max = el;
             }
+            min = el.compareTo(min) < 0 ? el : min;
+            max = el.compareTo(max) > 0 ? el : max;
+
         }
 
         public MinMaxAvg<T> build() {

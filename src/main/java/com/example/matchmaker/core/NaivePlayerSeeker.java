@@ -4,6 +4,7 @@ package com.example.matchmaker.core;
 import com.example.matchmaker.api.PlayerPool;
 import com.example.matchmaker.api.PlayerSeeker;
 import com.example.matchmaker.config.PlayerSeekerConfig;
+import com.example.matchmaker.misc.Utils;
 import com.example.matchmaker.model.Player;
 
 import java.util.HashSet;
@@ -35,12 +36,22 @@ public class NaivePlayerSeeker implements PlayerSeeker {
     }
 
     private boolean isFitsBySkill(Player currentPlayer, Player player) {
-        final double rating = abs(currentPlayer.getSkill() - player.getSkill()) / currentPlayer.getSkill(); //TODO: Zero?
+        final double currentPlayerSkill = currentPlayer.getSkill();
+        final double playerSkill = player.getSkill();
+        if (Utils.equals(currentPlayerSkill, playerSkill)){
+            return true;
+        }
+        final double rating = abs(currentPlayerSkill - playerSkill) / currentPlayerSkill;
         return Double.compare(rating, conf.getSkillDiff()) <= 0;
     }
 
     private boolean isFitsByLatency(Player currentPlayer, Player player) {
-        final double rating = abs(currentPlayer.getLatency() - player.getLatency()) / currentPlayer.getLatency(); //TODO: Zero?
+        final double currentPlayerLatency = currentPlayer.getLatency();
+        final double playerLatency = player.getLatency();
+        if (Utils.equals(currentPlayerLatency, playerLatency)){
+            return true;
+        }
+        final double rating = abs(currentPlayerLatency - playerLatency) / currentPlayerLatency;
         return Double.compare(rating, conf.getLatencyDiff()) <= 0;
     }
 
