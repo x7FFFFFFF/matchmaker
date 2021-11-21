@@ -5,9 +5,7 @@ import com.example.matchmaker.api.PlayerPool;
 import com.example.matchmaker.config.PlayerPoolConfig;
 import com.example.matchmaker.model.Player;
 
-import java.util.Collection;
-import java.util.NavigableMap;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.stream.Collectors;
@@ -45,20 +43,43 @@ public class PlayerPoolImpl implements PlayerPool {
     }
 
     private void delete(NavigableMap<Double, Set<Player>> skillSubMap, NavigableMap<Double, Set<Player>> latencySubMap, NavigableMap<Long, Set<Player>> createdSubMap, Set<Player> intersection) {
-        if (intersection.isEmpty()) {
+        if (!intersection.isEmpty()) {
             // try {
             //  writeLock.lock();
             remove(skillSubMap, intersection);
             remove(latencySubMap, intersection);
             remove(createdSubMap, intersection);
+
+            //TODO if set.isEmpty remove key
+
             // } finally {
             //    writeLock.unlock();
             //}
         }
     }
 
-    private void remove(NavigableMap<? extends Number, Set<Player>> map, Set<Player> players) {
-        map.values().forEach(s -> s.removeAll(players));
+    private <T extends Number>  void remove(NavigableMap<T, Set<Player>> map, Set<Player> players) {
+        //map.values().forEach(s -> s.removeAll(players));
+        final List<T> numbers = new ArrayList<>(map.keySet());
+        numbers.forEach(n-> map.compute(n, (key, oldValue) -> {
+            if (oldValue != null) {
+                oldValue.removeAll(players);
+                if (!oldValue.isEmpty()) {
+                    return oldValue;
+                }
+            }
+            return null;
+        }));
+
+
+
+/*        numbers.forEach(k->{
+            map.compute(k, (key, oldValue)->{
+
+
+            });
+        });*/
+
     }
 
     private NavigableMap<Long, Set<Player>> getCreated(Player currentPlayer) {

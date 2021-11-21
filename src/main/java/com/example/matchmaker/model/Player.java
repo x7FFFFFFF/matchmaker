@@ -1,5 +1,7 @@
 package com.example.matchmaker.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -11,7 +13,7 @@ public class Player {
     private final double skill; //Zero?
     private final double latency; //ms  //Zero?
     private final long created;
-
+    @JsonCreator
     public Player(String name, double skill, double latency) {
         this(counter.incrementAndGet(), name, skill, latency, System.currentTimeMillis());
     }

@@ -20,9 +20,11 @@ class MatchmakerApplicationTests {
 
     @Test
     void contextLoads() {
-        final String answer = this.restTemplate.postForObject("http://localhost:" + port + "/users",
+        final String url = "http://localhost:" + port + "/users";
+        this.restTemplate.postForObject(url,
                 new Player("user1", 1, 1000), String.class);
-        System.out.println("answer = " + answer);
+        this.restTemplate.postForObject(url,
+                new Player("user2", 1, 1000), String.class);
     }
 
 

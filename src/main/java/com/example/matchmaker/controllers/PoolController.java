@@ -5,6 +5,7 @@ import com.example.matchmaker.model.Player;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -17,7 +18,7 @@ public class PoolController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<String> newUser(Player player) {
+    public ResponseEntity<String> newUser(@RequestBody Player player) {
         publisher.publishEvent(new NewPlayerEvent(player));
         return ResponseEntity.ok("Ok: userId=" + player.getId());
     }
