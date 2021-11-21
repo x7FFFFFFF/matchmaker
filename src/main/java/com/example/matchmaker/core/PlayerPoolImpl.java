@@ -38,6 +38,9 @@ public class PlayerPoolImpl implements PlayerPool {
         //    readLock.unlock();
         // }
         final Set<Player> intersection = intersection(groupSize, skillSubMap, latencySubMap, createdSubMap);
+        if (intersection.size() != groupSize) {
+            return Collections.emptySet();
+        }
         delete(skillSubMap, latencySubMap, createdSubMap, intersection);
         return intersection;
     }
@@ -58,10 +61,10 @@ public class PlayerPoolImpl implements PlayerPool {
         }
     }
 
-    private <T extends Number>  void remove(NavigableMap<T, Set<Player>> map, Set<Player> players) {
+    private <T extends Number> void remove(NavigableMap<T, Set<Player>> map, Set<Player> players) {
         //map.values().forEach(s -> s.removeAll(players));
         final List<T> numbers = new ArrayList<>(map.keySet());
-        numbers.forEach(n-> map.compute(n, (key, oldValue) -> {
+        numbers.forEach(n -> map.compute(n, (key, oldValue) -> {
             if (oldValue != null) {
                 oldValue.removeAll(players);
                 if (!oldValue.isEmpty()) {

@@ -25,12 +25,14 @@ public class NewPlayerEventListener {
         this.publisher = publisher;
     }
 
+
     @EventListener
     @Async
     public void onApplicationEvent(NewPlayerEvent event) {
         final Player player = event.getPlayer();
-        final Set<Player> players = playerPool.pollSimilar(player, groupSize-1);
-        if (!players.isEmpty()) {
+        final int size = this.groupSize - 1;
+        final Set<Player> players = playerPool.pollSimilar(player, size);
+        if (players.size() == size) {
             players.add(player);
             final Match match = new Match(players);
             publisher.publishEvent(new NewMatchEvent(match));
