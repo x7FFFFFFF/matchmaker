@@ -1,22 +1,20 @@
 package com.example.matchmaker;
 
-import com.example.matchmaker.api.Matchmaker;
 import com.example.matchmaker.api.PlayerPool;
-import com.example.matchmaker.api.PlayerSeeker;
-import com.example.matchmaker.config.PlayerSeekerConfig;
-import com.example.matchmaker.core.MatchmakerImpl;
-import com.example.matchmaker.core.NaivePlayerSeeker;
-import com.example.matchmaker.core.SimpleSyncPool;
-import org.springframework.beans.factory.annotation.Value;
+import com.example.matchmaker.config.PlayerPoolConfig;
+import com.example.matchmaker.core.PlayerPoolImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+
+import java.util.concurrent.Executor;
 
 @SpringBootApplication
 @EnableAsync
-@EnableConfigurationProperties(PlayerSeekerConfig.class)
+@EnableConfigurationProperties(PlayerPoolConfig.class)
 public class MatchmakerApplication {
 
     public static void main(String[] args) {
@@ -25,23 +23,38 @@ public class MatchmakerApplication {
 
 
     @Bean
+    public Executor taskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(5);
+        executor.setMaxPoolSize(10);
+        executor.setQueueCapacity(500);
+        executor.setThreadNamePrefix("TaskExecutor-");
+        executor.initialize();
+        return executor;
+    }
+
+    @Bean
+    PlayerPool playerPool() {
+        return new PlayerPoolImpl(playerPoolConfig());
+    }
+
+  /*  @Bean
     public PlayerPool playerPool() {
         return new SimpleSyncPool();
-    }
+    }*/
 
-    @Bean
+  /*  @Bean
     public PlayerSeeker playerSeeker() {
         return new NaivePlayerSeeker(playerSeekerConfig());
-    }
+    }*/
 
-    @Bean
+  /*  @Bean
     public Matchmaker matchmaker(PlayerPool pool, PlayerSeeker seeker, @Value("${matchmaker.groupSize}") int groupSize) {
         return new MatchmakerImpl(pool, seeker, groupSize);
-    }
+    }*/
 
     @Bean
-
-    public PlayerSeekerConfig playerSeekerConfig() {
-        return new PlayerSeekerConfig();
+    public PlayerPoolConfig playerPoolConfig() {
+        return new PlayerPoolConfig();
     }
 }

@@ -14,8 +14,8 @@ public class MinMaxAvgDouble {
 
     public MinMaxAvgDouble(int count, boolean useKahanAlgo) {
         this.count = new long[count];
-        sum = new double[count];
-        sumCompensation = new double[count];
+        sum = useKahanAlgo ? new double[count] : null;
+        sumCompensation = useKahanAlgo ? new double[count] : null;
         simpleSum = new double[count];
         min = init(count, Double.POSITIVE_INFINITY);
         max = init(count, Double.NEGATIVE_INFINITY);
@@ -40,12 +40,12 @@ public class MinMaxAvgDouble {
 
     private void sumWithCompensation(int index, double value) {
         double tmp = value - sumCompensation[index];
-        double velvel = sum[index] + tmp; // Little wolf of rounding error
+        double velvel = sum[index] + tmp;
         sumCompensation[index] = (velvel - sum[index]) - tmp;
         sum[index] = velvel;
     }
 
-    public final double getAvg(int index) {
+    public final double getAverage(int index) {
         final double count = getCount(index);
         return count > 0 ? getSum(index) / count : 0.0d;
     }

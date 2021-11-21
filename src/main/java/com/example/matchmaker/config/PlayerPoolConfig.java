@@ -3,21 +3,17 @@ package com.example.matchmaker.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 
-@ConfigurationProperties(prefix = "player.seeker")
-public class PlayerSeekerConfig {
-    /**
-     * Допустим, есть player1, player2, и skillDiff=0.5
-     * Это значит, что player1 считается подходящим для player2,
-     * если abs(player1.getSkill() - player2.getSkill()) / player1.getSkill() <=0.5
-     */
+@ConfigurationProperties(prefix = "player.pool")
+public class PlayerPoolConfig {
+
     private double skillDiff;
     private double latencyDiff;
     private double createdDiff;
 
-    public PlayerSeekerConfig() {
+    public PlayerPoolConfig() {
     }
 
-    public PlayerSeekerConfig(double skillDiff, double latencyDiff, double createdDiff) {
+    public PlayerPoolConfig(double skillDiff, double latencyDiff, double createdDiff) {
         this.skillDiff = skillDiff;
         this.latencyDiff = latencyDiff;
         this.createdDiff = createdDiff;

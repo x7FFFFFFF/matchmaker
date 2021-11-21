@@ -18,9 +18,9 @@ class MinMaxAvgDoubleTest {
         assertTrue(1.0 == minMaxAvgDouble.getSum(1));
         assertTrue(1.0 == minMaxAvgDouble.getSum(2));
 
-        assertTrue(0.1 == minMaxAvgDouble.getAvg(0));
-        assertTrue(0.1 == minMaxAvgDouble.getAvg(1));
-        assertTrue(0.1 == minMaxAvgDouble.getAvg(2));
+        assertTrue(0.1 == minMaxAvgDouble.getAverage(0));
+        assertTrue(0.1 == minMaxAvgDouble.getAverage(1));
+        assertTrue(0.1 == minMaxAvgDouble.getAverage(2));
     }
 
     @Test
@@ -32,5 +32,15 @@ class MinMaxAvgDoubleTest {
         assertEquals(0, minMaxAvgDouble.getMin(0));
         assertEquals(9, minMaxAvgDouble.getMax(0));
 
+    }
+
+    @Test
+    void testSimple() {
+        final MinMaxAvgDouble minMaxAvgDouble = new MinMaxAvgDouble(1, false);
+        for (int i = 0; i < 10; i++) {
+            minMaxAvgDouble.add(0, 0.1);
+        }
+        System.out.println("minMaxAvgDouble = " + minMaxAvgDouble);
+        assertTrue(Utils.equals(1.0, minMaxAvgDouble.getSum(0)));
     }
 }
